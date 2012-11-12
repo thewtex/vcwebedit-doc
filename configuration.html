@@ -1,0 +1,195 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configure vcwebedit &mdash; vcwebedit 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/proBlue.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/vcwebedit.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="vcwebedit 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="Accepting changes from the web" href="accept_patches/accept_patches.html" />
+    <link rel="prev" title="Welcome to vcwebedit’s documentation!" href="index.html" />
+    <link  rel="stylesheet" href="_static/qunit/qunit.css" type="text/css" />
+    <script type="text/javascript" src="_static/qunit/qunit.js"></script>
+    <script type="text/javascript" src="_static/test_vcwebedit.js"></script>
+   
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="accept_patches/accept_patches.html" title="Accepting changes from the web"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to vcwebedit’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">vcwebedit 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configure-vcwebedit">
+<h1>Configure vcwebedit<a class="headerlink" href="#configure-vcwebedit" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-configure-your-sphinx-project-to-use-vcwebedit">
+<h2>How to configure your Sphinx project to use vcwebedit<a class="headerlink" href="#how-to-configure-your-sphinx-project-to-use-vcwebedit" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-the-extension">
+<span id="index-0"></span><h3>Install the extension<a class="headerlink" href="#install-the-extension" title="Permalink to this headline">¶</a></h3>
+<p>If your Sphinx documentation is stored under a <em>doc</em> directory in a Git
+repository, the vcwebedit can be added as a <a class="reference external" href="http://book.git-scm.com/5_submodules.html">Git submodule</a> with:</p>
+<div class="highlight-python"><pre>mkdir doc/ext
+git submodule add -- git://github.com/thewtex/vcwebedit.git doc/ext/vcwebedit</pre>
+</div>
+<p>The project uses its own submodules, so be sure to grab them:</p>
+<div class="highlight-python"><pre>cd doc/ext/vcwebedit
+git submodule update --init --recursive</pre>
+</div>
+<p>In your <em>conf.py</em>, add the extension location to the <cite>sys.path</cite> and the list of
+enabled extensions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s">&#39;ext/vcwebedit/src&#39;</span><span class="p">))</span>
+<span class="o">...</span>
+<span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;vcwebedit&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>Custom templates are used for creating links in the sidebar to the editing page
+and for the edit page itself.  For Sphinx to see these templates, they should be
+added to the <cite>templates_path</cite> <cite>conf.py</cite> configuration entry:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">template_path</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;_templates&#39;</span><span class="p">,</span> <span class="s">&#39;ext/vcwebedit/src/templates&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>A similar configuration is needed for the html static files:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">html_static_path</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;_static&#39;</span><span class="p">,</span> <span class="s">&#39;ext/vcwebedit/src/static&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The the location of the editting link in the sidebar is controlled by the
+position at which the <em>editlink.html</em> entry appears the <a class="reference external" href="http://sphinx.pocoo.org/config.html?highlight=html_sidebars#confval-html_sidebars">html_sidebars</a>
+configuration entry:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">html_sidebars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;**&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;localtoc.html&#39;</span><span class="p">,</span> <span class="s">&#39;relations.html&#39;</span><span class="p">,</span> <span class="s">&#39;editlink.html&#39;</span><span class="p">,</span> <span class="s">&#39;searchbox.html&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that using the glob key entry for <a class="reference external" href="http://sphinx.pocoo.org/config.html?highlight=html_sidebars#confval-html_sidebars">html_sidebars</a> is one way to configure
+which pages are editable.</p>
+<p>To make all documents not editable by default, set the <cite>vcwebedit_all_editable</cite>
+entry in your <cite>conf.py</cite> to <cite>False</cite> (defaults to <cite>True</cite>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vcwebedit_all_editable</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Next, configure <a class="reference external" href="accept_patches/accept_patches.html">a server to accept patches</a>.</p>
+<p>Finally, make sure the <cite>html_copy_source</cite> configuration entry is set to <cite>True</cite>
+(the default).</p>
+</div>
+<div class="section" id="mark-documents-as-editable">
+<span id="index-1"></span><h3>Mark documents as editable<a class="headerlink" href="#mark-documents-as-editable" title="Permalink to this headline">¶</a></h3>
+<p>There are three ways to control which pages are editable,</p>
+<ol class="arabic simple">
+<li>The <cite>editable</cite> <a class="reference external" href="http://sphinx.pocoo.org/markup/misc.html#file-wide-metadata">file-wide metadata</a> entry.</li>
+<li>The presence/absence of <em>editlink.html</em> in the <a class="reference external" href="http://sphinx.pocoo.org/config.html?highlight=html_sidebars#confval-html_sidebars">html_sidebars</a> configuration entry.</li>
+<li>The global <cite>vcwebedit_all_editable</cite> configuration entry.</li>
+</ol>
+<p>By default, all sources are assumed to be editable.  The <cite>editable</cite> file-wide
+metadata entry should have a boolean value like <em>True</em> or <em>False</em>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configure vcwebedit</a><ul>
+<li><a class="reference internal" href="#how-to-configure-your-sphinx-project-to-use-vcwebedit">How to configure your Sphinx project to use vcwebedit</a><ul>
+<li><a class="reference internal" href="#install-the-extension">Install the extension</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#mark-documents-as-editable">Mark documents as editable</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to vcwebedit&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="accept_patches/accept_patches.html"
+                        title="next chapter">Accepting changes from the web</a></p>
+  <h3>Edit this page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_edit_configuration.html"
+           rel="nofollow">Edit online</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="accept_patches/accept_patches.html" title="Accepting changes from the web"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to vcwebedit’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">vcwebedit 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Matthew McCormick.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

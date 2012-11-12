@@ -1,0 +1,230 @@
+
+
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to vcwebedit’s documentation! &mdash; vcwebedit 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/proBlue.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/vcwebedit.css" type="text/css" />
+    <link rel="stylesheet" href="_static/codemirror/lib/codemirror.css" type="text/css" />
+    <link rel="stylesheet" href="_static/codemirror/theme/cobalt.css" type="text/css" />
+    <link rel="stylesheet" href="_static/codemirror/theme/eclipse.css" type="text/css" />
+    <link rel="stylesheet" href="_static/codemirror/theme/elegant.css" type="text/css" />
+    <link rel="stylesheet" href="_static/codemirror/theme/monokai.css" type="text/css" />
+    <link rel="stylesheet" href="_static/codemirror/theme/neat.css" type="text/css" />
+    <link rel="stylesheet" href="_static/codemirror/theme/night.css" type="text/css" />
+    <link rel="stylesheet" href="_static/codemirror/theme/rubyblue.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="_static/codemirror/keymap/emacs.js"></script>
+    <script type="text/javascript" src="_static/codemirror/keymap/vim.js"></script>
+    <script type="text/javascript" src="_static/codemirror/mode/rst/rst.js"></script>
+    <script type="text/javascript" src="_static/jsdiff/diff.js"></script>
+    <script type="text/javascript" src="_static/vcwebedit.js"></script>
+    <link rel="top" title="vcwebedit 0.1.0 documentation" href="index.html" />
+    <link rel="next" title="Configure vcwebedit" href="configuration.html" />
+    
+    <style type="text/css"> .CodeMirror-scroll { height: 500px; overflow: scroll; } </style>
+    
+    <style type="text/css">.CodeMirror pre.CodeMirror-cursor { height:1.3em; }</style>
+    
+    <link  rel="stylesheet" href="_static/qunit/qunit.css" type="text/css" />
+    <script type="text/javascript" src="_static/qunit/qunit.js"></script>
+    <script type="text/javascript" src="_static/test_vcwebedit.js"></script>
+   
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configure vcwebedit"
+             accesskey="N">next</a> |</li>
+        <li><a href="index.html">vcwebedit 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+          
+          <h2>vcwebedit Unit Tests</h2>
+          <input type="button" value="Run the vcwebedit unit tests" onclick="vcw.run_tests()" />
+          <div style="display:none" id="vcwebedit-test-results">
+            <h1 id="qunit-header">vcwebedit Unit Test Results</h1>
+            <h2 id="qunit-banner"></h2>
+            <div id="qunit-testrunner-toolbar"></div>
+            <h2 id="qunit-userAgent"></h2>
+            <ol id="qunit-tests"></ol>
+            <div id="qunit-fixture">test markup, will be hidden</div>
+          </div>
+        
+          <h2>Editor</h2>
+          <div id="vcw.editor">
+          </div>
+          <h2>Patch</h2>
+          <form id="patchForm">
+            Commit message:<br/>
+            <div style="border-style:inset;border-width:2px;">
+              <div id="vcw.commitMessage">
+              </div>
+            </div>
+            <table>
+            <tr align="left">
+              <td>Author name:</td>
+              <td><input type="text" name="authorName" oninput="vcw.patchContentChanged()"/></td>
+              <td></td>
+              <td id="vcw.errorMessage" class="system-message" style="display:none;"></td>
+            </tr>
+            <tr align="left">
+              <td>Author email:</td>
+              <td><input type="text" name="authorEmail" oninput="vcw.patchContentChanged()"/></td>
+            </tr>
+            <tr align="left">
+              <td></td>
+              <td><a class="patchGeneration"
+                    onclick="editor.previewPatch()"/>Prepare patch</a></td>
+              <td><a id="saveToFile" class="patchGeneration">Save patch locally</a></td>
+              <td><a id="submitPatch" class="patchGeneration"
+                    onclick="alert('Not implemented yet!')">Submit patch</a></td>
+            </tr>
+          </table></form>
+          <div id="patchPreviewSection" style="display:none;">
+            <h2>Patch preview</h2>
+            <div style="border-style:inset;border-width:2px;">
+              <div id="vcw.patchPreviewText"></div>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            // global editor variable
+            editor = new vcw.Editor();
+            // Load the ReST file for this page.
+            editor.loadFile("_sources/index.txt");
+
+            function initializeWindow()
+              {
+              // Use the keymap cookie.
+              var keymap = vcw.read_cookie( "vcw.editor.keymap" );
+              if( keymap )
+                {
+                document.getElementById( "vcw.keymapSelection" ).value = keymap;
+                editor.selectKeymap( keymap );
+                }
+              // Use the theme cookie.
+              var theme = vcw.read_cookie( "vcw.editor.theme" );
+              if( theme )
+                {
+                document.getElementById( "vcw.themeSelection" ).value = theme;
+                editor.selectTheme( theme );
+                }
+              window.URL = window.webkitURL || window.URL;
+              window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+              if( !window.URL || !window.BlobBuilder )
+                {
+                // Saving the patch to a file will not work without these HTML5
+                // features present.
+                var saveToFile = document.getElementById( 'saveToFile' );
+                saveToFile.style.display = 'none';
+                }
+              // Disable the patch outputs.
+              vcw.setReadyToSave( false );
+              }
+            if( window.onload )
+              {
+              window.onload = function()
+                {
+                window.onload();
+                initializeWindow();
+                }
+              }
+            else
+              {
+              window.onload = initializeWindow;
+              }
+            </script>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+          <h3>Editor options</h3>
+          <form><table>
+            <tr align="left">
+              <td><a class="reference internal">Theme:</a></td>
+              <td>
+                <select id="vcw.themeSelection" onchange="editor.selectTheme()">
+                  <option>default</option>
+                  <option>night</option>
+                  <option>monokai</option>
+                  <option>neat</option>
+                  <option>elegant</option>
+                  <option>cobalt</option>
+                  <option>eclipse</option>
+                  <option>rubyblue</option>
+                </select>
+              </td>
+            </tr>
+            <tr align="left">
+              <td><a class="reference internal">Keymap:</a></td>
+              <td>
+                <select id="vcw.keymapSelection" onchange="editor.selectKeymap()">
+                  <option>default</option>
+                  <option>emacs</option>
+                  <option>vim</option>
+                </select>
+              </td>
+            </tr>
+          </table></form>
+            <h3>Return</h3>
+            <ul class="this-page-menu">
+              <li><a href="index.html"
+                     rel="nofollow">Return to the original page</a></li>
+            </ul>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configure vcwebedit"
+             >next</a> |</li>
+        <li><a href="index.html">vcwebedit 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Matthew McCormick.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

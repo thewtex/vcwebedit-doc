@@ -1,0 +1,135 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Online editing &mdash; vcwebedit 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/proBlue.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/vcwebedit.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="vcwebedit 0.1.0 documentation" href="index.html" />
+    <link rel="prev" title="Setting up the WSGI server" href="accept_patches/server_setup.html" />
+    <link  rel="stylesheet" href="_static/qunit/qunit.css" type="text/css" />
+    <script type="text/javascript" src="_static/qunit/qunit.js"></script>
+    <script type="text/javascript" src="_static/test_vcwebedit.js"></script>
+   
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="accept_patches/server_setup.html" title="Setting up the WSGI server"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">vcwebedit 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="online-editing">
+<h1>Online editing<a class="headerlink" href="#online-editing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-use-the-browser-based-editing-system">
+<h2>How to use the browser based editing system<a class="headerlink" href="#how-to-use-the-browser-based-editing-system" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="working-with-the-editor-on-localhost">
+<h3>Working with the editor on <em>localhost</em><a class="headerlink" href="#working-with-the-editor-on-localhost" title="Permalink to this headline">¶</a></h3>
+<p>If you are using the editor on files from your local machine, the editor may be
+unable to perform the AJAX load of local sources because <em>file://</em> requests have
+a null origin for the purposes of the <a class="reference external" href="http://en.wikipedia.org/wiki/Same_origin_policy">Same Origin Policy</a>.</p>
+<p>To get around this, you can start a web server locally.  For instance, <em>cd</em> to
+the build directory, then run:</p>
+<div class="highlight-python"><pre>python -m SimpleHTTPServer</pre>
+</div>
+<p>and point your browser to <em>http://localhost:8000</em>.  Alteratively, if you are
+using chromium, start it with the flag:</p>
+<div class="highlight-python"><pre>chromium --allow-file-access-from-files</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Online editing</a><ul>
+<li><a class="reference internal" href="#how-to-use-the-browser-based-editing-system">How to use the browser based editing system</a><ul>
+<li><a class="reference internal" href="#working-with-the-editor-on-localhost">Working with the editor on <em>localhost</em></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="accept_patches/server_setup.html"
+                        title="previous chapter">Setting up the WSGI server</a></p>
+  <h3>Edit this page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_edit_web_edit.html"
+           rel="nofollow">Edit online</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="accept_patches/server_setup.html" title="Setting up the WSGI server"
+             >previous</a> |</li>
+        <li><a href="index.html">vcwebedit 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Matthew McCormick.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

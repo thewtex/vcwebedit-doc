@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Setting up the WSGI server &mdash; vcwebedit 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/proBlue.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/vcwebedit.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="vcwebedit 0.1.0 documentation" href="../index.html" />
+    <link rel="next" title="Online editing" href="../web_edit.html" />
+    <link rel="prev" title="Accepting changes from the web" href="accept_patches.html" />
+    <link  rel="stylesheet" href="_static/qunit/qunit.css" type="text/css" />
+    <script type="text/javascript" src="_static/qunit/qunit.js"></script>
+    <script type="text/javascript" src="_static/test_vcwebedit.js"></script>
+   
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../web_edit.html" title="Online editing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="accept_patches.html" title="Accepting changes from the web"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">vcwebedit 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="setting-up-the-wsgi-server">
+<span id="server-setup"></span><h1>Setting up the WSGI server<a class="headerlink" href="#setting-up-the-wsgi-server" title="Permalink to this headline">¶</a></h1>
+<p>Any server software that supports the <a class="reference external" href="http://www.python.org/dev/peps/pep-3333/">WSGI standard</a> can be used to host the
+vcwebedit web application used to accept patches.  For reference, example server
+software stacks and configurations are provided here.  Easy setup is possible
+with a Linux server on the <a class="reference external" href="http://www.rackspace.com/cloud/public/servers/">Rackspace OpenStack</a> or the <a class="reference external" href="http://aws.amazon.com/ec2/">Amazon EC2</a> cloud,
+for example.</p>
+<div class="section" id="gunicorn-and-nginx">
+<h2>Gunicorn and Nginx<a class="headerlink" href="#gunicorn-and-nginx" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://gunicorn.org/">Gunicorn</a> is a Python WSGI server for UNIX that is simple, light on resources,
+and fast.  <a class="reference external" href="http://gunicorn.org/install.html">Gunicorn installation</a> is described well on their website.  For a
+Debian, a configuration file at <em>/etc/gunicorn.d/vcwebedit</em> could be</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;mode&#39;</span><span class="p">:</span> <span class="s">&#39;wsgi&#39;</span><span class="p">,</span>
+    <span class="s">&#39;working_dir&#39;</span><span class="p">:</span> <span class="s">&#39;/home/user/src/vcwebedit/src/&#39;</span><span class="p">,</span>
+    <span class="s">&#39;python&#39;</span><span class="p">:</span> <span class="s">&#39;/usr/bin/python&#39;</span><span class="p">,</span>
+    <span class="s">&#39;args&#39;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s">&#39;--bind=unix:/tmp/gunicorn_vcwebedit.sock&#39;</span><span class="p">,</span>
+        <span class="s">&#39;--workers=3&#39;</span><span class="p">,</span>
+        <span class="s">&#39;--timeout=60&#39;</span><span class="p">,</span>
+        <span class="s">&#39;vcwebeditwsgi:application&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The Gunicorn WSGI server should be coupled with an <a class="reference external" href="http://nginx.org/">Nginx</a> proxy server.  An
+<a class="reference external" href="http://gunicorn.org/deploy.html">example Nginx configuration</a> can also be found on the Gunicorn website.
+Again, on a stock Debian system, the following example configuration could live in
+<em>/etc/nginx/sites-available/vcwebedit</em> with a symlink at
+<em>/etc/nginx/sites-enabled/vcwebedit</em></p>
+<div class="highlight-python"><pre>upstream vcwebedit_app_server {
+        server unix:/tmp/gunicorn_vcwebedit.sock fail_timeout=0;
+}
+
+server {
+
+        listen   80; ## listen for ipv4
+        listen   [::]:80 default ipv6only=on; ## listen for ipv6
+
+        server_name  localhost;
+
+        access_log  /var/log/nginx/localhost.access.log;
+
+        client_max_body_size 1G;
+
+        root   /www;
+
+        location / {
+                index  index.html index.htm;
+                # checks for static file, if not found proxy to app
+                try_files $uri @proxy_to_app;
+        }
+
+        location @proxy_to_app {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+
+                proxy_pass http://vcwebedit_app_server;
+        }
+
+        #error_page  404  /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        #error_page   500 502 503 504  /50x.html;
+        #location = /50x.html {
+        #       root   /var/www/nginx-default;
+        #}
+}
+
+</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setting up the WSGI server</a><ul>
+<li><a class="reference internal" href="#gunicorn-and-nginx">Gunicorn and Nginx</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="accept_patches.html"
+                        title="previous chapter">Accepting changes from the web</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../web_edit.html"
+                        title="next chapter">Online editing</a></p>
+  <h3>Edit this page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_edit_server_setup.html"
+           rel="nofollow">Edit online</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../web_edit.html" title="Online editing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="accept_patches.html" title="Accepting changes from the web"
+             >previous</a> |</li>
+        <li><a href="../index.html">vcwebedit 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Matthew McCormick.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
